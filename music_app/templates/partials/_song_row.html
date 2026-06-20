@@ -1,0 +1,25 @@
+{% load static %}
+<div class="song-row" data-playable data-song-id="{{ song.song_id }}" data-src="{{ song.song.url }}" data-title="{{ song.name }}" data-artist="{{ song.singer1 }}" data-cover="{{ song.image.url }}">
+  <span class="row-index">{{ forloop.counter|default:"" }}</span>
+  <a href="/song/{{ song.song_id }}" class="song-main">
+    <img src="{{ song.image.url }}" alt="">
+    <span class="song-titles">
+      <strong>{{ song.name }}</strong>
+      <small>{{ song.singer1 }}{% if song.singer2 %}, {{ song.singer2 }}{% endif %}</small>
+    </span>
+  </a>
+  <span class="song-sub">{{ song.movie }}</span>
+  <span class="song-actions">
+    <button type="button" class="row-btn play-overlay-btn" data-play-trigger data-song-id="{{ song.song_id }}" title="Play"><svg><use href="#i-play"/></svg></button>
+    {% if user.is_authenticated %}
+    <button type="button" class="row-btn{% if liked %} liked{% endif %}" data-like-toggle data-song-id="{{ song.song_id }}" data-like-id="{{ song.song_id }}" title="Like"><svg><use href="#i-heart"/></svg></button>
+    <button type="button" class="row-btn" data-add-to-playlist data-song-id="{{ song.song_id }}" title="Add to playlist"><svg><use href="#i-more"/></svg></button>
+    {% else %}
+    <button type="button" class="row-btn" data-like-toggle data-needs-login data-song-id="{{ song.song_id }}" title="Like"><svg><use href="#i-heart"/></svg></button>
+    <button type="button" class="row-btn" data-add-to-playlist data-needs-login data-song-id="{{ song.song_id }}" title="Add to playlist"><svg><use href="#i-more"/></svg></button>
+    {% endif %}
+    {% if show_remove %}
+    <button type="button" class="row-btn" data-remove-song data-song-id="{{ song.song_id }}" data-playlist-id="{{ show_remove }}" title="Remove from playlist"><svg><use href="#i-trash"/></svg></button>
+    {% endif %}
+  </span>
+</div>

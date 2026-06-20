@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Lyra · {{ singer.name }}{% endblock %}
+
+{% block content %}
+<div class="detail-hero glass">
+  <img class="detail-cover round" src="{{ singer.image.url }}" alt="{{ singer.name }}">
+  <div class="detail-info">
+    <div class="kicker">Artist</div>
+    <h1>{{ singer.name }}</h1>
+    <p class="meta-line">{{ singer.songCount }} song{{ singer.songCount|pluralize }} in the library</p>
+    <div class="detail-actions">
+      {% if singerSongs %}
+      <button type="button" class="play-pill" data-play-trigger data-song-id="{{ singerSongs.0.song_id }}"><svg><use href="#i-play"/></svg>Play</button>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<h2 class="section-title" style="margin-top: 10px;">Top Songs</h2>
+{% if singerSongs %}
+<div class="song-table">
+  {% for song in singerSongs %}{% include 'partials/_song_row.html' with song=song %}{% endfor %}
+</div>
+{% else %}
+<p class="empty-state">No songs found for this artist yet.</p>
+{% endif %}
+{% endblock %}

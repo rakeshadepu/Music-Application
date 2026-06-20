@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Lyra · History{% endblock %}
+
+{% block content %}
+<h2 class="section-title">
+  History
+  {% if history %}<span class="count">{{ history|length }} songs</span>{% endif %}
+</h2>
+
+{% if history %}
+<div style="margin-bottom: 14px;">
+  <button type="button" id="deleteHistoryBtn" class="danger-link">Clear history</button>
+</div>
+<div class="song-table">
+  {% for song in history %}{% include 'partials/_song_row.html' with song=song %}{% endfor %}
+</div>
+{% else %}
+<p class="empty-state">Songs you play will show up here.</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% block title %}Lyra · {{ playlistInfo.playlist_name }}{% endblock %}
+
+{% block content %}
+{% widthratio playlistInfo.playlist_id 1 47 as hue %}
+<div class="detail-hero glass">
+  <div class="detail-cover cover-gradient" style="background: linear-gradient(150deg, hsl({{ hue }},70%,50%), hsl({{ hue|add:60 }},70%,45%));">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><use href="#i-note"/></svg>
+  </div>
+  <div class="detail-info">
+    <div class="kicker">Playlist</div>
+    <h1>{{ playlistInfo.playlist_name }}</h1>
+    <p class="meta-line">{{ playlistSongs|length }} songs</p>
+    <div class="detail-actions">
+      {% if playlistSongs %}
+      <button type="button" class="play-pill" data-play-trigger data-song-id="{{ playlistSongs.0.song_id }}"><svg><use href="#i-play"/></svg>Play</button>
+      {% endif %}
+      <form action="/deletePlaylist" method="POST" onsubmit="return confirm('Delete this playlist?');">
+        {% csrf_token %}
+        <input type="hidden" name="playlist_id" value="{{ playlistInfo.playlist_id }}">
+        <button type="submit" class="danger-link">Delete playlist</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if playlistSongs %}
+<div class="song-table">
+  {% for song in playlistSongs %}{% include 'partials/_song_row.html' with song=song show_remove=playlistInfo.playlist_id %}{% endfor %}
+</div>
+{% else %}
+<p class="empty-state">This playlist is empty. Add songs using the &ldquo;&hellip;&rdquo; button on any track.</p>
+{% endif %}
+
+{% if recommendedSingers %}
+<h2 class="section-title" style="margin-top: 10px;">You might also like</h2>
+<div class="hscroll">
+  {% for singer in recommendedSingers %}{% include 'partials/_artist_chip.html' with singer=singer %}{% endfor %}
+</div>
+{% endif %}
+{% endblock %}

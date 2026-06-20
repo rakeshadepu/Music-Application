@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+{% block title %}Lyra · Liked Songs{% endblock %}
+
+{% block content %}
+<h2 class="section-title">
+  Liked Songs
+  {% if likedSongs %}<span class="count">{{ likedSongs|length }} songs</span>{% endif %}
+</h2>
+
+{% if likedSongs %}
+<div class="song-table">
+  {% for song in likedSongs %}{% include 'partials/_song_row.html' with song=song liked=True %}{% endfor %}
+</div>
+{% else %}
+<p class="empty-state">Tap the heart on any song to save it here.</p>
+{% endif %}
+{% endblock %}

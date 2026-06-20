@@ -1,0 +1,5 @@
+{% load static %}
+<a href="/album/{{ singer.singer_id }}" class="artist-chip">
+  <img src="{{ singer.image.url }}" alt="{{ singer.name }}">
+  <strong>{{ singer.name }}</strong>
+</a>

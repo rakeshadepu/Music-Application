@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Lyra · Home{% endblock %}
+
+{% block content %}
+
+<div class="hero-row">
+  <!-- {% if myPlaylists %}
+  <a href="/myPlaylist/{{ myPlaylists.0.playlist_id }}" class="hero-card playlist-of-day">
+    <div class="hero-eyebrow">{{ myPlaylists.0.plays }} songs &middot; Your playlist</div>
+    <h3>{{ myPlaylists.0.playlist_name }}</h3>
+  </a>
+  {% else %}
+  <a href="/allSongs" class="hero-card playlist-of-day">
+    <div class="hero-eyebrow">{{ trendingSongs|length }} tracks trending</div>
+    <h3>Explore every song</h3>
+  </a>
+  {% endif %} -->
+
+  {% if trendingSongs %}
+  {% with spotlight=trendingSongs.0 %}
+  <div class="spotlight-card" data-playable data-song-id="{{ spotlight.song_id }}" data-src="{{ spotlight.song.url }}"
+    data-title="{{ spotlight.name }}" data-artist="{{ spotlight.singer1 }}" data-cover="{{ spotlight.image.url }}">
+    <img class="spotlight-art" src="{{ spotlight.image.url }}" alt="">
+    <div class="spotlight-info">
+      <div class="hero-eyebrow">{{ spotlight.singer1 }} &middot; {{ spotlight.year }}</div>
+      <h3>{{ spotlight.name }}</h3>
+      <p>{{ spotlight.movie }}</p>
+    </div>
+    <button type="button" class="spotlight-play" data-play-trigger data-song-id="{{ spotlight.song_id }}">
+      <svg>
+        <use href="#i-play" />
+      </svg>
+    </button>
+  </div>
+  {% endwith %}
+  {% endif %}
+</div>
+
+<!-- ── Main content + Rightbar wrapper ── -->
+<div class="content-rightbar-layout">
+
+  <!-- ── LEFT: tabs + panels ── -->
+  <div class="main-content">
+    <div class="tabs">
+      <button type="button" class="tab-btn active" data-tab="trending">Trending</button>
+      <button type="button" class="tab-btn" data-tab="new">New Releases</button>
+      <button type="button" class="tab-btn" data-tab="foryou">For You</button>
+      <button type="button" class="tab-btn" data-tab="artists">Top Artists</button>
+      {% if user.is_authenticated %}
+      <button type="button" class="tab-btn" data-tab="recent">Recently Played</button>
+      {% endif %}
+    </div>
+
+    <div class="tab-panel active" data-tab="trending">
+      <div class="song-table">
+        {% for song in trendingSongs %}{% include 'partials/_song_row.html' with song=song %}{% endfor %}
+      </div>
+    </div>
+
+    <div class="tab-panel" data-tab="new">
+      <div class="song-table">
+        {% for song in newRealeases %}{% include 'partials/_song_row.html' with song=song %}{% endfor %}
+      </div>
+    </div>
+
+    <div class="tab-panel" data-tab="foryou">
+      <div class="song-table">
+        {% for song in songsFromVariousArtists %}{% include 'partials/_song_row.html' with song=song %}{% endfor %}
+      </div>
+    </div>
+
+    <div class="tab-panel" data-tab="artists">
+      <div class="hscroll">
+        {% for singer in singers %}{% include 'partials/_artist_chip.html' with singer=singer %}{% endfor %}
+      </div>
+    </div>
+
+    {% if user.is_authenticated %}
+    <div class="tab-panel" data-tab="recent">
+      <div class="song-table">
+        {% if recentSongs %}
+        {% for song in recentSongs %}
+        {% include 'partials/_song_row.html' with song=song %}
+        {% endfor %}
+        {% else %}
+        <p class="empty-state">Play something and it'll show up here.</p>
+        {% endif %}
+      </div>
+    </div>
+    {% endif %}
+  </div>
+
+</div>
+
+{% endblock %}

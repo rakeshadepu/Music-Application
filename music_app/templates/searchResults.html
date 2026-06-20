@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% block title %}Lyra · Search{% endblock %}
+
+{% block content %}
+<h2 class="section-title">Songs</h2>
+{% if songsFound %}
+<div class="song-table">
+  {% for song in songsFound %}{% include 'partials/_song_row.html' with song=song %}{% endfor %}
+</div>
+{% else %}
+<p class="empty-state">No songs matched your search.</p>
+{% endif %}
+
+<h2 class="section-title" style="margin-top: 10px;">Artists</h2>
+{% if singersFound %}
+<div class="hscroll">
+  {% for singer in singersFound %}{% include 'partials/_artist_chip.html' with singer=singer %}{% endfor %}
+</div>
+{% else %}
+<p class="empty-state">No artists matched your search.</p>
+{% endif %}
+{% endblock %}
